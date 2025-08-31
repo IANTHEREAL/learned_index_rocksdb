@@ -26,8 +26,18 @@ set(SOURCES
     src/learned_index/sst_learned_index_manager.cpp
 )
 
+# Benchmark sources
+set(BENCHMARK_SOURCES
+    src/learned_index/benchmark_framework.cpp
+    benchmarks/workloads/ycsb_workloads.cpp
+)
+
 # Create library
 add_library(learned_index_rocksdb ${SOURCES})
+
+# Create benchmark library
+add_library(learned_index_benchmark ${BENCHMARK_SOURCES})
+target_link_libraries(learned_index_benchmark learned_index_rocksdb)
 
 # Link libraries
 target_link_libraries(learned_index_rocksdb ${CRC32C_LIBRARIES})
@@ -53,6 +63,14 @@ endif()
 # Example executable
 add_executable(learned_index_example examples/basic_usage.cpp)
 target_link_libraries(learned_index_example learned_index_rocksdb)
+
+# Benchmark executable
+add_executable(learned_index_benchmark_suite benchmarks/main_benchmark.cpp)
+target_link_libraries(learned_index_benchmark_suite learned_index_benchmark learned_index_rocksdb pthread)
+
+# Quick demo executable
+add_executable(learned_index_quick_demo benchmarks/quick_demo.cpp)
+target_link_libraries(learned_index_quick_demo learned_index_benchmark learned_index_rocksdb pthread)
 
 # Installation
 install(TARGETS learned_index_rocksdb
