@@ -1,0 +1,5 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/learned_index_targets.cmake")
+
+check_required_components(learned_index)
