@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learned Index Performance Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .metric-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .status-healthy {
+            color: #28a745;
+        }
+        
+        .status-warning {
+            color: #ffc107;
+        }
+        
+        .status-critical {
+            color: #dc3545;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .model-selector {
+            margin-bottom: 20px;
+        }
+        
+        .refresh-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 20px;
+            padding: 8px 20px;
+        }
+        
+        .alert-banner {
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .loading-spinner {
+            display: none;
+        }
+        
+        .health-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .health-healthy {
+            background-color: #28a745;
+        }
+        
+        .health-warning {
+            background-color: #ffc107;
+        }
+        
+        .health-critical {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-0">Learned Index Performance Dashboard</h1>
+                    <p class="mb-0 opacity-75">Real-time monitoring and adaptive retraining</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button id="refreshBtn" class="btn btn-light refresh-btn">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <div class="loading-spinner">
+                        <div class="spinner-border spinner-border-sm text-light" role="status"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Model Selection -->
+        <div class="model-selector">
+            <div class="card metric-card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <label for="modelSelect" class="form-label"><strong>Select Model:</strong></label>
+                            <select id="modelSelect" class="form-select">
+                                <option value="">Loading models...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="timeRange" class="form-label"><strong>Time Range:</strong></label>
+                            <select id="timeRange" class="form-select">
+                                <option value="1">Last Hour</option>
+                                <option value="6">Last 6 Hours</option>
+                                <option value="24" selected>Last 24 Hours</option>
+                                <option value="168">Last Week</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alerts -->
+        <div id="alertsContainer"></div>
+
+        <!-- Key Metrics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <div id="currentAccuracy" class="metric-value">--</div>
+                        <div class="metric-label">Current Accuracy</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <div id="totalQueries" class="metric-value">--</div>
+                        <div class="metric-label">Total Queries</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <div id="retrainCount" class="metric-value">--</div>
+                        <div class="metric-label">Retraining Events</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <div id="modelStatus" class="metric-value">--</div>
+                        <div class="metric-label">Model Status</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <h5 class="mb-3">Accuracy Over Time</h5>
+                    <div id="accuracyChart" style="height: 400px;"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <h5 class="mb-3">Throughput (QPS)</h5>
+                    <div id="throughputChart" style="height: 400px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Model Health Table -->
+        <div class="chart-container">
+            <h5 class="mb-3">Model Health Overview</h5>
+            <div class="table-responsive">
+                <table id="healthTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Model ID</th>
+                            <th>Status</th>
+                            <th>Accuracy</th>
+                            <th>1H Trend</th>
+                            <th>7D Trend</th>
+                            <th>Queries Served</th>
+                            <th>Last Retrain</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Demo Controls -->
+        <div class="chart-container">
+            <h5 class="mb-3">Demo Controls</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <button id="startDemoBtn" class="btn btn-success me-2">Start Demo Data</button>
+                    <button id="stopDemoBtn" class="btn btn-danger">Stop Demo Data</button>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="autoRefresh" checked>
+                        <label class="form-check-label" for="autoRefresh">
+                            Auto-refresh (30s)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+    <script>
+        class DashboardApp {
+            constructor() {
+                this.currentModel = null;
+                this.refreshInterval = null;
+                this.init();
+            }
+
+            init() {
+                this.loadModels();
+                this.bindEvents();
+                this.startAutoRefresh();
+            }
+
+            bindEvents() {
+                document.getElementById('modelSelect').addEventListener('change', (e) => {
+                    this.currentModel = e.target.value;
+                    if (this.currentModel) {
+                        this.refreshData();
+                    }
+                });
+
+                document.getElementById('timeRange').addEventListener('change', () => {
+                    if (this.currentModel) {
+                        this.refreshData();
+                    }
+                });
+
+                document.getElementById('refreshBtn').addEventListener('click', () => {
+                    this.refreshData();
+                });
+
+                document.getElementById('autoRefresh').addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        this.startAutoRefresh();
+                    } else {
+                        this.stopAutoRefresh();
+                    }
+                });
+
+                document.getElementById('startDemoBtn').addEventListener('click', () => {
+                    this.startDemo();
+                });
+
+                document.getElementById('stopDemoBtn').addEventListener('click', () => {
+                    this.stopDemo();
+                });
+            }
+
+            async loadModels() {
+                try {
+                    const response = await fetch('/api/models');
+                    const models = await response.json();
+                    
+                    const select = document.getElementById('modelSelect');
+                    select.innerHTML = '<option value="">Select a model...</option>';
+                    
+                    models.forEach(model => {
+                        const option = document.createElement('option');
+                        option.value = model;
+                        option.textContent = model;
+                        select.appendChild(option);
+                    });
+
+                    if (models.length > 0) {
+                        select.value = models[0];
+                        this.currentModel = models[0];
+                        this.refreshData();
+                    }
+                } catch (error) {
+                    console.error('Error loading models:', error);
+                    this.showAlert('Error loading models', 'danger');
+                }
+            }
+
+            async refreshData() {
+                if (!this.currentModel) return;
+
+                this.showLoading(true);
+                
+                try {
+                    await Promise.all([
+                        this.loadModelHealth(),
+                        this.loadAccuracyChart(),
+                        this.loadThroughputChart(),
+                        this.loadHealthTable()
+                    ]);
+                } catch (error) {
+                    console.error('Error refreshing data:', error);
+                    this.showAlert('Error refreshing data', 'danger');
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+
+            async loadModelHealth() {
+                const response = await fetch(`/api/health/${this.currentModel}`);
+                const health = await response.json();
+
+                if (health) {
+                    document.getElementById('currentAccuracy').textContent = 
+                        (health.current_accuracy * 100).toFixed(1) + '%';
+                    document.getElementById('totalQueries').textContent = 
+                        health.total_queries_served.toLocaleString();
+                    document.getElementById('retrainCount').textContent = health.retrain_count;
+                    
+                    const statusEl = document.getElementById('modelStatus');
+                    if (health.needs_retraining) {
+                        statusEl.innerHTML = '<span class="health-indicator health-critical"></span>Needs Retrain';
+                        statusEl.className = 'metric-value status-critical';
+                    } else if (health.is_degrading) {
+                        statusEl.innerHTML = '<span class="health-indicator health-warning"></span>Degrading';
+                        statusEl.className = 'metric-value status-warning';
+                    } else {
+                        statusEl.innerHTML = '<span class="health-indicator health-healthy"></span>Healthy';
+                        statusEl.className = 'metric-value status-healthy';
+                    }
+
+                    // Show alerts for models needing attention
+                    if (health.needs_retraining) {
+                        this.showAlert(
+                            `Model ${this.currentModel} needs retraining (${(health.current_accuracy * 100).toFixed(1)}% accuracy)`,
+                            'danger'
+                        );
+                    } else if (health.is_degrading) {
+                        this.showAlert(
+                            `Model ${this.currentModel} performance is degrading`,
+                            'warning'
+                        );
+                    }
+                }
+            }
+
+            async loadAccuracyChart() {
+                const hours = document.getElementById('timeRange').value;
+                const response = await fetch(`/api/accuracy_chart/${this.currentModel}?hours=${hours}`);
+                const chartData = await response.json();
+
+                if (chartData.error) {
+                    console.error('Chart error:', chartData.error);
+                    return;
+                }
+
+                Plotly.newPlot('accuracyChart', chartData.data, chartData.layout, {
+                    responsive: true,
+                    displayModeBar: false
+                });
+            }
+
+            async loadThroughputChart() {
+                const hours = document.getElementById('timeRange').value;
+                const response = await fetch(`/api/throughput_chart/${this.currentModel}?hours=${hours}`);
+                const chartData = await response.json();
+
+                if (chartData.error) {
+                    console.error('Chart error:', chartData.error);
+                    return;
+                }
+
+                Plotly.newPlot('throughputChart', chartData.data, chartData.layout, {
+                    responsive: true,
+                    displayModeBar: false
+                });
+            }
+
+            async loadHealthTable() {
+                const response = await fetch('/api/dashboard_data');
+                const data = await response.json();
+
+                const tbody = document.querySelector('#healthTable tbody');
+                tbody.innerHTML = '';
+
+                Object.keys(data).forEach(modelId => {
+                    const modelData = data[modelId];
+                    const health = modelData.health;
+
+                    const row = tbody.insertRow();
+                    
+                    // Model ID
+                    row.insertCell(0).textContent = modelId;
+                    
+                    // Status
+                    const statusCell = row.insertCell(1);
+                    if (health.needs_retraining) {
+                        statusCell.innerHTML = '<span class="badge bg-danger">Needs Retrain</span>';
+                    } else if (health.is_degrading) {
+                        statusCell.innerHTML = '<span class="badge bg-warning">Degrading</span>';
+                    } else {
+                        statusCell.innerHTML = '<span class="badge bg-success">Healthy</span>';
+                    }
+                    
+                    // Accuracy
+                    row.insertCell(2).textContent = (health.current_accuracy * 100).toFixed(1) + '%';
+                    
+                    // 1H Trend
+                    const trend1h = health.accuracy_trend_1h;
+                    const trend1hCell = row.insertCell(3);
+                    trend1hCell.textContent = (trend1h * 100).toFixed(2) + '%';
+                    trend1hCell.className = trend1h < -0.01 ? 'text-danger' : trend1h > 0.01 ? 'text-success' : 'text-muted';
+                    
+                    // 7D Trend
+                    const trend7d = health.accuracy_trend_7d;
+                    const trend7dCell = row.insertCell(4);
+                    trend7dCell.textContent = (trend7d * 100).toFixed(2) + '%';
+                    trend7dCell.className = trend7d < -0.02 ? 'text-danger' : trend7d > 0.02 ? 'text-success' : 'text-muted';
+                    
+                    // Queries Served
+                    row.insertCell(5).textContent = health.total_queries_served.toLocaleString();
+                    
+                    // Last Retrain
+                    const lastRetrain = new Date(health.last_retrain_timestamp_ms);
+                    row.insertCell(6).textContent = lastRetrain.toLocaleString();
+                    
+                    // Actions
+                    const actionsCell = row.insertCell(7);
+                    if (health.needs_retraining) {
+                        actionsCell.innerHTML = '<button class="btn btn-sm btn-warning">Retrain Now</button>';
+                    } else {
+                        actionsCell.innerHTML = '<button class="btn btn-sm btn-outline-secondary">View Details</button>';
+                    }
+                });
+            }
+
+            showAlert(message, type = 'info') {
+                const container = document.getElementById('alertsContainer');
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type} alert-dismissible fade show alert-banner`;
+                alert.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                container.appendChild(alert);
+
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.remove();
+                    }
+                }, 5000);
+            }
+
+            showLoading(show) {
+                const spinner = document.querySelector('.loading-spinner');
+                const refreshBtn = document.getElementById('refreshBtn');
+                
+                if (show) {
+                    spinner.style.display = 'inline-block';
+                    refreshBtn.disabled = true;
+                } else {
+                    spinner.style.display = 'none';
+                    refreshBtn.disabled = false;
+                }
+            }
+
+            startAutoRefresh() {
+                this.stopAutoRefresh();
+                this.refreshInterval = setInterval(() => {
+                    if (document.getElementById('autoRefresh').checked) {
+                        this.refreshData();
+                    }
+                }, 30000); // 30 seconds
+            }
+
+            stopAutoRefresh() {
+                if (this.refreshInterval) {
+                    clearInterval(this.refreshInterval);
+                    this.refreshInterval = null;
+                }
+            }
+
+            async startDemo() {
+                try {
+                    const response = await fetch('/start_demo');
+                    const result = await response.json();
+                    this.showAlert(result.status, 'success');
+                    
+                    // Refresh after starting demo
+                    setTimeout(() => {
+                        this.loadModels();
+                    }, 2000);
+                } catch (error) {
+                    this.showAlert('Error starting demo', 'danger');
+                }
+            }
+
+            async stopDemo() {
+                try {
+                    const response = await fetch('/stop_demo');
+                    const result = await response.json();
+                    this.showAlert(result.status, 'info');
+                } catch (error) {
+                    this.showAlert('Error stopping demo', 'danger');
+                }
+            }
+        }
+
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new DashboardApp();
+        });
+    </script>
+</body>
+</html>

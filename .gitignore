@@ -1,0 +1,33 @@
+# Compiled Object files
+*.o
+
+# Compiled Static libraries
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+learned_index_test
+examples/basic_usage
+examples/adaptive_demo
+
+# Dashboard Python cache
+dashboard/__pycache__/
+dashboard/*.pyc
+dashboard/*.db
+dashboard/*.log
+
+# Build artifacts
+build/
+.vscode/
+.vs/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
