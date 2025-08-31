@@ -1,0 +1,21 @@
+test_name,index_type,workload_type,dataset_size,num_queries,avg_latency_us,p50_latency_us,p95_latency_us,p99_latency_us,throughput_qps,index_memory_bytes,peak_memory_bytes,prediction_accuracy,fallback_rate
+,LearnedIndex,Sequential (dataset=10000, queries=5000),10000,5000,0.124789,0.122,0.134,0.149,6.12745e+06,160676,0,0.889,0.111
+,SortedArray,Sequential (dataset=10000, queries=5000),10000,5000,0.0683002,0.068,0.084,0.095,9.32836e+06,160048,0,1,0
+,B+Tree,Sequential (dataset=10000, queries=5000),10000,5000,0.051308,0.051,0.052,0.053,1.11359e+07,1068,0,1,0
+,HashTable,Sequential (dataset=10000, queries=5000),10000,5000,0.0352736,0.034,0.037,0.04,1.36612e+07,326104,0,1,0
+,LearnedIndex,Random (dataset=10000, queries=5000),10000,5000,0.14745,0.146,0.165,0.183,5.35332e+06,160676,0,0.9445,0.0555
+,SortedArray,Random (dataset=10000, queries=5000),10000,5000,0.0957334,0.095,0.115,0.122,7.48503e+06,160048,0,1,0
+,B+Tree,Random (dataset=10000, queries=5000),10000,5000,0.0592082,0.059,0.061,0.062,1.02249e+07,1068,0,1,0
+,HashTable,Random (dataset=10000, queries=5000),10000,5000,0.0382832,0.037,0.05,0.056,1.31234e+07,318232,0,1,0
+,LearnedIndex,Mixed (dataset=10000, queries=5000),10000,5000,0.143219,0.14,0.161,0.179,5.51876e+06,160676,0,0.962933,0.0370667
+,SortedArray,Mixed (dataset=10000, queries=5000),10000,5000,0.091421,0.09,0.109,0.117,7.72798e+06,160048,0,1,0
+,B+Tree,Mixed (dataset=10000, queries=5000),10000,5000,0.0515074,0.051,0.053,0.075,1.11857e+07,1068,0,1,0
+,HashTable,Mixed (dataset=10000, queries=5000),10000,5000,0.0372678,0.036,0.05,0.056,1.32979e+07,322616,0,1,0
+,LearnedIndex,Zipfian (dataset=10000, queries=5000),10000,5000,0.121381,0.121,0.125,0.126,6.27353e+06,160676,0,0.9722,0.0278
+,SortedArray,Zipfian (dataset=10000, queries=5000),10000,5000,0.0452416,0.045,0.047,0.048,1.19048e+07,160048,0,1,0
+,B+Tree,Zipfian (dataset=10000, queries=5000),10000,5000,0.0602586,0.06,0.062,0.062,1.01626e+07,1068,0,1,0
+,HashTable,Zipfian (dataset=10000, queries=5000),10000,5000,0.0340618,0.034,0.036,0.036,1.36612e+07,166120,0,1,0
+,LearnedIndex,Temporal (dataset=10000, queries=5000),10000,5000,0.121719,0.121,0.125,0.134,6.26566e+06,160676,0,0.97776,0.02224
+,SortedArray,Temporal (dataset=10000, queries=5000),10000,5000,0.067564,0.065,0.081,0.094,9.48767e+06,160048,0,1,0
+,B+Tree,Temporal (dataset=10000, queries=5000),10000,5000,0.0525218,0.051,0.053,0.061,1.10619e+07,1068,0,1,0
+,HashTable,Temporal (dataset=10000, queries=5000),10000,5000,0.0388098,0.035,0.051,0.059,1.30548e+07,326104,0,1,0

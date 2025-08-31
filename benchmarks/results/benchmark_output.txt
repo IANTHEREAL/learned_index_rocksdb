@@ -1,0 +1,391 @@
+=== Comprehensive Learned Index Benchmark ===
+Comparing Learned Index vs Traditional Indexes
+=============================================
+
+============================================================
+
+=== Running Benchmark: Sequential (dataset=10000, queries=5000) ===
+
+Index: LearnedIndex
+  Avg Latency: 0.12 μs
+  P95 Latency: 0.13 μs
+  Throughput:  6195787 QPS
+  Memory:      157 KB
+  Accuracy:    88.9%
+
+Index: SortedArray
+  Avg Latency: 0.07 μs
+  P95 Latency: 0.08 μs
+  Throughput:  9363296 QPS
+  Memory:      156 KB
+  Accuracy:    100.0%
+
+Index: B+Tree
+  Avg Latency: 0.05 μs
+  P95 Latency: 0.05 μs
+  Throughput:  11160714 QPS
+  Memory:      1 KB
+  Accuracy:    100.0%
+
+Index: HashTable
+  Avg Latency: 0.03 μs
+  P95 Latency: 0.04 μs
+  Throughput:  13927577 QPS
+  Memory:      318 KB
+  Accuracy:    100.0%
+
+============================================================
+
+=== Running Benchmark: Random (dataset=10000, queries=5000) ===
+
+Index: LearnedIndex
+  Avg Latency: 0.15 μs
+  P95 Latency: 0.16 μs
+  Throughput:  5411255 QPS
+  Memory:      157 KB
+  Accuracy:    94.5%
+
+Index: SortedArray
+  Avg Latency: 0.10 μs
+  P95 Latency: 0.12 μs
+  Throughput:  7485030 QPS
+  Memory:      156 KB
+  Accuracy:    100.0%
+
+Index: B+Tree
+  Avg Latency: 0.05 μs
+  P95 Latency: 0.05 μs
+  Throughput:  11600928 QPS
+  Memory:      1 KB
+  Accuracy:    100.0%
+
+Index: HashTable
+  Avg Latency: 0.04 μs
+  P95 Latency: 0.05 μs
+  Throughput:  13123360 QPS
+  Memory:      311 KB
+  Accuracy:    100.0%
+
+============================================================
+
+=== Running Benchmark: Mixed (dataset=10000, queries=5000) ===
+
+Index: LearnedIndex
+  Avg Latency: 0.14 μs
+  P95 Latency: 0.16 μs
+  Throughput:  5586592 QPS
+  Memory:      157 KB
+  Accuracy:    96.3%
+
+Index: SortedArray
+  Avg Latency: 0.09 μs
+  P95 Latency: 0.11 μs
+  Throughput:  7800312 QPS
+  Memory:      156 KB
+  Accuracy:    100.0%
+
+Index: B+Tree
+  Avg Latency: 0.05 μs
+  P95 Latency: 0.05 μs
+  Throughput:  11494253 QPS
+  Memory:      1 KB
+  Accuracy:    100.0%
+
+Index: HashTable
+  Avg Latency: 0.04 μs
+  P95 Latency: 0.05 μs
+  Throughput:  13227513 QPS
+  Memory:      315 KB
+  Accuracy:    100.0%
+
+============================================================
+
+=== Running Benchmark: Zipfian (dataset=10000, queries=5000) ===
+
+Index: LearnedIndex
+  Avg Latency: 0.12 μs
+  P95 Latency: 0.12 μs
+  Throughput:  6297229 QPS
+  Memory:      157 KB
+  Accuracy:    97.2%
+
+Index: SortedArray
+  Avg Latency: 0.05 μs
+  P95 Latency: 0.05 μs
+  Throughput:  12106538 QPS
+  Memory:      156 KB
+  Accuracy:    100.0%
+
+Index: B+Tree
+  Avg Latency: 0.05 μs
+  P95 Latency: 0.05 μs
+  Throughput:  11547344 QPS
+  Memory:      1 KB
+  Accuracy:    100.0%
+
+Index: HashTable
+  Avg Latency: 0.03 μs
+  P95 Latency: 0.04 μs
+  Throughput:  14245014 QPS
+  Memory:      162 KB
+  Accuracy:    100.0%
+
+============================================================
+
+=== Running Benchmark: Temporal (dataset=10000, queries=5000) ===
+
+Index: LearnedIndex
+  Avg Latency: 0.12 μs
+  P95 Latency: 0.12 μs
+  Throughput:  6273526 QPS
+  Memory:      157 KB
+  Accuracy:    97.8%
+
+Index: SortedArray
+  Avg Latency: 0.07 μs
+  P95 Latency: 0.08 μs
+  Throughput:  9523810 QPS
+  Memory:      156 KB
+  Accuracy:    100.0%
+
+Index: B+Tree
+  Avg Latency: 0.05 μs
+  P95 Latency: 0.05 μs
+  Throughput:  11627907 QPS
+  Memory:      1 KB
+  Accuracy:    100.0%
+
+Index: HashTable
+  Avg Latency: 0.04 μs
+  P95 Latency: 0.05 μs
+  Throughput:  13440860 QPS
+  Memory:      318 KB
+  Accuracy:    100.0%
+
+=== Benchmark Summary ===
+
+Test: Sequential (dataset=10000, queries=5000) - LearnedIndex
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.12 μs
+  P95 Latency: 0.13 μs
+  P99 Latency: 0.15 μs
+  Throughput: 6195787 QPS
+  Index Memory: 157 KB
+  Accuracy: 88.9%
+  Fallback Rate: 11.1%
+
+Test: Sequential (dataset=10000, queries=5000) - SortedArray
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.07 μs
+  P95 Latency: 0.08 μs
+  P99 Latency: 0.09 μs
+  Throughput: 9363296 QPS
+  Index Memory: 156 KB
+  Accuracy: 100.0%
+  Fallback Rate: 0.0%
+
+Test: Sequential (dataset=10000, queries=5000) - B+Tree
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.05 μs
+  P95 Latency: 0.05 μs
+  P99 Latency: 0.05 μs
+  Throughput: 11160714 QPS
+  Index Memory: 1 KB
+  Accuracy: 100.0%
+  Fallback Rate: 0.0%
+
+Test: Sequential (dataset=10000, queries=5000) - HashTable
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.03 μs
+  P95 Latency: 0.04 μs
+  P99 Latency: 0.04 μs
+  Throughput: 13927577 QPS
+  Index Memory: 318 KB
+  Accuracy: 100.0%
+  Fallback Rate: 0.0%
+
+Test: Random (dataset=10000, queries=5000) - LearnedIndex
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.15 μs
+  P95 Latency: 0.16 μs
+  P99 Latency: 0.18 μs
+  Throughput: 5411255 QPS
+  Index Memory: 157 KB
+  Accuracy: 94.5%
+  Fallback Rate: 5.5%
+
+Test: Random (dataset=10000, queries=5000) - SortedArray
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.10 μs
+  P95 Latency: 0.12 μs
+  P99 Latency: 0.12 μs
+  Throughput: 7485030 QPS
+  Index Memory: 156 KB
+  Accuracy: 100.0%
+  Fallback Rate: 0.0%
+
+Test: Random (dataset=10000, queries=5000) - B+Tree
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.05 μs
+  P95 Latency: 0.05 μs
+  P99 Latency: 0.05 μs
+  Throughput: 11600928 QPS
+  Index Memory: 1 KB
+  Accuracy: 100.0%
+  Fallback Rate: 0.0%
+
+Test: Random (dataset=10000, queries=5000) - HashTable
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.04 μs
+  P95 Latency: 0.05 μs
+  P99 Latency: 0.06 μs
+  Throughput: 13123360 QPS
+  Index Memory: 311 KB
+  Accuracy: 100.0%
+  Fallback Rate: 0.0%
+
+Test: Mixed (dataset=10000, queries=5000) - LearnedIndex
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.14 μs
+  P95 Latency: 0.16 μs
+  P99 Latency: 0.18 μs
+  Throughput: 5586592 QPS
+  Index Memory: 157 KB
+  Accuracy: 96.3%
+  Fallback Rate: 3.7%
+
+Test: Mixed (dataset=10000, queries=5000) - SortedArray
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.09 μs
+  P95 Latency: 0.11 μs
+  P99 Latency: 0.12 μs
+  Throughput: 7800312 QPS
+  Index Memory: 156 KB
+  Accuracy: 100.0%
+  Fallback Rate: 0.0%
+
+Test: Mixed (dataset=10000, queries=5000) - B+Tree
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.05 μs
+  P95 Latency: 0.05 μs
+  P99 Latency: 0.08 μs
+  Throughput: 11494253 QPS
+  Index Memory: 1 KB
+  Accuracy: 100.0%
+  Fallback Rate: 0.0%
+
+Test: Mixed (dataset=10000, queries=5000) - HashTable
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.04 μs
+  P95 Latency: 0.05 μs
+  P99 Latency: 0.06 μs
+  Throughput: 13227513 QPS
+  Index Memory: 315 KB
+  Accuracy: 100.0%
+  Fallback Rate: 0.0%
+
+Test: Zipfian (dataset=10000, queries=5000) - LearnedIndex
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.12 μs
+  P95 Latency: 0.12 μs
+  P99 Latency: 0.13 μs
+  Throughput: 6297229 QPS
+  Index Memory: 157 KB
+  Accuracy: 97.2%
+  Fallback Rate: 2.8%
+
+Test: Zipfian (dataset=10000, queries=5000) - SortedArray
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.05 μs
+  P95 Latency: 0.05 μs
+  P99 Latency: 0.05 μs
+  Throughput: 12106538 QPS
+  Index Memory: 156 KB
+  Accuracy: 100.0%
+  Fallback Rate: 0.0%
+
+Test: Zipfian (dataset=10000, queries=5000) - B+Tree
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.05 μs
+  P95 Latency: 0.05 μs
+  P99 Latency: 0.05 μs
+  Throughput: 11547344 QPS
+  Index Memory: 1 KB
+  Accuracy: 100.0%
+  Fallback Rate: 0.0%
+
+Test: Zipfian (dataset=10000, queries=5000) - HashTable
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.03 μs
+  P95 Latency: 0.04 μs
+  P99 Latency: 0.04 μs
+  Throughput: 14245014 QPS
+  Index Memory: 162 KB
+  Accuracy: 100.0%
+  Fallback Rate: 0.0%
+
+Test: Temporal (dataset=10000, queries=5000) - LearnedIndex
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.12 μs
+  P95 Latency: 0.12 μs
+  P99 Latency: 0.14 μs
+  Throughput: 6273526 QPS
+  Index Memory: 157 KB
+  Accuracy: 97.8%
+  Fallback Rate: 2.2%
+
+Test: Temporal (dataset=10000, queries=5000) - SortedArray
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.07 μs
+  P95 Latency: 0.08 μs
+  P99 Latency: 0.09 μs
+  Throughput: 9523810 QPS
+  Index Memory: 156 KB
+  Accuracy: 100.0%
+  Fallback Rate: 0.0%
+
+Test: Temporal (dataset=10000, queries=5000) - B+Tree
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.05 μs
+  P95 Latency: 0.05 μs
+  P99 Latency: 0.06 μs
+  Throughput: 11627907 QPS
+  Index Memory: 1 KB
+  Accuracy: 100.0%
+  Fallback Rate: 0.0%
+
+Test: Temporal (dataset=10000, queries=5000) - HashTable
+  Dataset Size: 10000
+  Queries: 5000
+  Avg Latency: 0.04 μs
+  P95 Latency: 0.05 μs
+  P99 Latency: 0.06 μs
+  Throughput: 13440860 QPS
+  Index Memory: 318 KB
+  Accuracy: 100.0%
+  Fallback Rate: 0.0%
+Failed to open output file: benchmarks/results/benchmark_results.csv
+
+=== Benchmark Complete ===
+Results saved to: benchmarks/results/
+Charts generated as Python scripts in benchmarks/results/
+Run the .py files to generate PNG charts.
